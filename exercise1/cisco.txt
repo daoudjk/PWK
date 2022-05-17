@@ -1,0 +1,12 @@
+cisco.com
+community.cisco.com
+id.cisco.com
+learninglocator.cloudapps.cisco.com
+locatr.cloudapps.cisco.com
+meraki.cisco.com
+newsroom.cisco.com
+partnersuccess.cisco.com
+rpfa.cloudapps.cisco.com
+search.cisco.com
+software.cisco.com
+www.cisco.com
