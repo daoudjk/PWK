@@ -1,0 +1,79 @@
+#netcat tcp connect port scan, attempts 3-way handshake
+nc -nvv -w 1 -z {ip} {port range}
+
+#SYN scan, does not complete handshake
+
+#UDP port scan, adds -u flag
+nc -unvv -w 1 -z {ip} {port range}
+#UDP scans either return ICMP destination unreachable if closed, or nothing if open
+#this causes unreliability because firewalls/routers may drop packets, leading to false positives
+
+#Nmap
+#nmap config files are in /usr/share/nmap -- show some protocol information links
+
+#nmap ping sweep with greppable output format
+#results in clean, easily greppable list of targets
+nmap -sn {ip range} -oG ping-sweep-nmap
+
+#scan specific ports
+nmap -p 80 {ip range} -oG port-80-scan
+
+#scan the 20 most common ports
+nmap -sT --top-ports 20 {ip range} -oG top-port-sweep.txt
+
+#nmap -o -sV and -A provide OS fingerprinting, banner grabbing, and vigorous scanning respectively
+
+#nmap scripting engine, NSE
+scripts are in /usr/share/nmap/scripts
+
+#server message block, SMB enumeration
+nmap -p139,445 {ip range} --open
+#--open only shows open port results
+
+#nbtscan is a kali linux tool for scanning netbios with more refined results
+nbtscan {ip range}
+
+#smb/nbt null sessions with rpcclient (kali built-in)
+rpcclient -U "" {ip}
+#use an empty password when prompted
+#get os info
+srvinfo
+#show users
+enumdomusers
+#show password policies
+getdompwinfo
+
+#enum4linux more robust scanning for nbt
+enum4linux -v {ip}
+#returns a bunch of info related to the target
+
+#find nmap SMB NSE scripts
+ls -l /usr/share/nmap/scripts/ | grep smb
+
+#find known SMB vulnerabilities
+nmap -p 139-445 --script=smb-check-vulns --script-args=unsafe=1 {ip}
+
+#SMTP enumeration
+nc -nv {ip} {port=25}
+#connects to SMTP service
+#check for users
+VRFY {username}
+#returns 250 if exists, 550 if non-existent
+#see bash script
+#see python script
+
+#SNMP Enumeration
+#SNMP is UDP-based
+#often unencrypted, or weak encryption
+#SNMP MiB values correspond to specific processes. See mib-values.txt
+#scan SNMP with nnap
+nmap -sU --open -p 161 {ip range} --open
+
+#built-in tool "onesixtyone" can interrogate SNMP using a few helper files. See community-strings and ips
+onesixtyone -c community -i ips
+
+#SNMPWalk - built in tool for traversing the SNMP MiB tree
+snmpwalk -c public -v1 {ip}
+
+#use snmpwalk with specific mib-values from mib-values.txt
+snmpwalk -c public -v1 {ip} {mib-value}

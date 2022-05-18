@@ -1,0 +1,23 @@
+#google search modifiers
+"site:" - restrict results to site
+
+#negate search criteria
+"-site:" - negated site modifier
+
+#look for files of a certain type
+"filetype:"
+
+#search for specific banners, like exposed vnc services
+"intitle:" "VNC viewer for Java"
+
+#search for specific url strings, like known default webcam urls
+"inurl:" "/control/userimage.html"
+
+#search for urls that belong to post-authenticated pages
+"inurl:.php? intext:CHARACTER_SETS,COLLATIONS intitle:phpmyadmin"
+
+#find compromised machines by searching for strings from known backdoors
+"intitle:" "-N3t" "filetype:php undetectable"
+
+#google hacking database
+hosted on exploit-db

@@ -1,0 +1,31 @@
+#dns enumeration
+#find nameservers
+host -t ns {url}
+#find mailservers
+host -t mx {url}
+#get ip address of url
+host www.megacorpone.com
+#check if address exists
+host {non-existent-url} -> returns NXDOMAIN
+
+#loop through potential hostnames to find ip addresses
+see forward.sh script
+
+#reverse dns lookup
+use known ip addresses from previous script to identify a potential range of machines that might exist, then loop through the range and perform a reverse lookup.
+see reverse.sh script
+
+#dns zone transfers
+host -l {domain name} {server name}
+#example
+host -l microsoft.com ns1.microsoft.com
+host -l microsoft.com ns2.microsoft.com
+host -l microsoft.com ns3.microsoft.com
+
+#loop through nameservers and attempt zone transfers
+for server in $(host -t ns megacorpone.com |cut -d" " -f4); do host -l megacorpone.com $server; done
+see zonetransfer.sh script
+
+#kali linux built in DNS tools
+DNS-Recon
+DNS-Enum
