@@ -1,0 +1,17 @@
+#buffer overflows
+
+#OllyDbg
+1. File -> open -> vulnerable file
+2. set arguments
+3. Open
+#this will run the executable and pause the execution, showing the assembly code as it executes
+#ESP - extended stack pointer register - points to the top of the running process's stack
+#EIP - extended intruction pointer register - points to the address of the instruction being executed at any given time
+
+#F2 will create a breakpoint on the given line. The program runs to the breakpoint
+
+#when a function is called, the return address is pushed to the stack
+
+#F7 steps into a function
+
+#f8 completes the given function

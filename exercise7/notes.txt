@@ -1,0 +1,26 @@
+#vulnerability scanning
+
+#NSE script for identifying vulnerable http services for a given IP
+nmap -v -p 80 --script http-vuln-cve2010-2861 {ip}
+
+#run all relevant NSE vulnerability scripts. Nmap's "kitchen sink" of vuln scanning
+nmap -v -p 80 --script all {ip}
+
+#OpenVAS
+#setup OpenVAS
+openvas-setup
+#also creates an admin user/password to access the OpenVAS service
+
+#start openvas after setup completes
+openvas-start
+
+#connect to OpenVas web service
+https://127.0.0.1:9392
+#localhost port 9392
+
+#options for scan configuration, or you can just quick scan a target
+
+#vulnerability reports may contain false positives, false negatives, and unexploitable vulnerabilities
+
+
+
